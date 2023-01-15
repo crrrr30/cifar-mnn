@@ -56,7 +56,6 @@ class LitClassifier(pl.LightningModule):
             optimizer.zero_grad()
             x, y = data
             y_hat, u = self.model(x)
-            print(y_hat)
             loss = (1 - self.lambda_m) * self.criterion(y_hat, y) + \
                 self.lambda_m * self.mnn(rearrange(u, "l b ... -> (l b) ..."))
             self.log("train_loss", loss, prog_bar=True)
