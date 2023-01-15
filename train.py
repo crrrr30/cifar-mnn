@@ -71,7 +71,7 @@ class LitClassifier(pl.LightningModule):
             }
         def validation_step(self, data, idx):
             x, y = data
-            y_hat = self.model(x)
+            y_hat, _ = self.model(x)
             loss = self.criterion(y_hat, y)
             _, predicted = y_hat.max(1)
             total = y.size(0)
