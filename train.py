@@ -33,7 +33,7 @@ class LitClassifier(pl.LightningModule):
         def __init__(self, model_config, lr=1e-3):
             super().__init__()
             self.learning_rate = lr
-            self.lambda_m = 1e-5
+            self.lambda_m = 0.
             self.automatic_optimization = False
             self.num_epochs = model_config["num_epochs"]
             self.mnn = MetaNetwork(512)
@@ -56,8 +56,8 @@ class LitClassifier(pl.LightningModule):
             optimizer.zero_grad()
             x, y = data
             y_hat, u = self.model(x)
-            loss = (1 - self.lambda_m) * self.criterion(y_hat, y) + \
-                self.lambda_m * self.mnn(rearrange(u, "l b ... -> (l b) ..."))
+            loss = (1 - self.lambda_m) * self.criterion(y_hat, y) #+ \
+                #self.lambda_m * self.mnn(rearrange(u, "l b ... -> (l b) ..."))
             self.log("train_loss", loss, prog_bar=True)
             self.manual_backward(loss)
             optimizer.step()
